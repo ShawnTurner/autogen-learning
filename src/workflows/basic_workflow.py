@@ -1,12 +1,12 @@
 import asyncio
-from typing import Optional, Any, Union
+from typing import Optional, Any
 from ..agents.custom_assistant import CustomAssistant
 
 async def run_basic_workflow(
     task: str,
     system_message: Optional[str] = None,
     model: str = "gpt-3.5-turbo"
-) -> Union[str, dict, None]:
+) -> str:
     """
     Run a basic workflow with a custom assistant.
     
@@ -25,7 +25,10 @@ async def run_basic_workflow(
     )
     
     response = await assistant.run(task=task)
-    return response
+    # Extract the last message content from the response
+    if response and response.messages and len(response.messages) > 0:
+        return response.messages[-1].content or ""
+    return ""
 
 async def main():
     """Example usage of the basic workflow."""
